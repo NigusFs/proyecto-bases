@@ -1,0 +1,40 @@
+1.-//pacientes que usan fonasa
+select pacientes.nombre from paciente where afiliacion='FONASA';
+
+
+2.-//dentista con mas años de experiencia
+select nombre from dentistas where experiencia = (select max(experiencia) from dentistas);
+
+
+3.-//pacientes q tienen alergia al paracetamol:
+
+select pacientes.nombre from pacientes,alergias where alergias.nombre='Paracetamol' and pacientes.rut=alergias.rut_paciente;
+
+
+
+4.-//pacientes q tienes reservas para una limpieza:
+
+select pacientes.nombre,tratamiento_nombre from pacientes,(select rut_paciente,tratamiento_nombre from reservas,pacientes_reservas where reservas.reserva_id = pacientes_reservas.reserva_id and reservas.tratamiento_nombre ='Limpieza') as a where a.rut_paciente= pacientes.rut; 
+
+5.-//dentistas que tienen reservas para realizar limpieza:
+
+select dentistas.nombre,tratamiento_nombre from dentistas,(select rut_dentista,tratamiento_nombre from reservas,dentistas_reservas where reservas.reserva_id = dentistas_reservas.reserva_id and reservas.tratamiento_nombre ='Limpieza') as a where a.rut_dentista= dentistas.rut;
+
+//borrar una hora tomada (eliminar de la disponibildad)
+
+delete from disponibilidad_dentista where rut_dentista=15151454 and fecha='2017-06-16'and hora=1030;
+
+6.-//dentistas con horas disponibles
+
+select dentistas.nombre,count(*)as sesiones_disponibles from 
+    disponibilidad_dentista,dentistas where 
+    dentistas.rut=rut_dentista 
+    group by dentistas.nombre order by sesiones_disponibles;
+
+7.-//horas disponibles del dentista Jamie lannister:
+select * from disponibilidad_dentista where nombre='Jamie Lannister' ;
+
+8.-//dentistas contratados
+select nombre,experiencia from dentistas;
+
+
